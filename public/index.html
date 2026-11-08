@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <title>pchat — چت فارسی با OpenCode</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230e9f6e'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='Tahoma'%3E%D9%BE%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <aside class="sidebar" id="sidebar" aria-label="گفتگوها">
+      <div class="sidebar-head">
+        <div class="brand">
+          <span class="brand-mark">پ</span>
+          <span class="brand-text">
+            <b>pchat</b>
+            <small>OpenCode</small>
+          </span>
+        </div>
+        <button class="btn-new" id="newChatBtn" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          گفتگوی جدید
+        </button>
+      </div>
+
+      <nav class="session-list" id="sessionList" aria-label="لیست گفتگوها"></nav>
+
+      <div class="sidebar-foot">
+        <div class="dir-box" id="dirBox" title="">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
+          <span id="dirText">—</span>
+        </div>
+        <button class="side-btn" id="settingsBtn" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.2.61.76 1 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+          تنظیمات
+        </button>
+      </div>
+    </aside>
+
+    <div class="scrim" id="scrim"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn only-mobile" id="menuBtn" type="button" aria-label="منو">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="chat-head">
+          <h1 class="chat-title" id="chatTitle">گفتگوی جدید</h1>
+          <span class="chat-sub" id="chatSub">آماده</span>
+        </div>
+        <div class="top-actions">
+          <button class="model-chip" id="modelChip" type="button" title="تغییر مدل">
+            <span class="dot"></span>
+            <span id="modelChipText">مدل</span>
+          </button>
+          <button class="icon-btn" id="themeBtn" type="button" aria-label="تغییر پوسته"></button>
+        </div>
+      </header>
+
+      <section class="messages" id="messages" aria-live="polite"></section>
+
+      <footer class="composer">
+        <div class="composer-inner">
+          <textarea id="input" rows="1" placeholder="پیام خود را بنویسید…" autocomplete="off" spellcheck="false"></textarea>
+          <button class="send-btn" id="sendBtn" type="button" aria-label="ارسال">
+            <svg class="ico-send" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12 4 4l3.5 8L4 20Z"/></svg>
+            <svg class="ico-stop" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/></svg>
+          </button>
+        </div>
+        <div class="composer-hint">
+          <span><kbd>Enter</kbd> ارسال</span>
+          <span><kbd>Shift</kbd>+<kbd>Enter</kbd> خط جدید</span>
+          <span class="status" id="statusText"></span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="settingsModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="modal-head">
+        <h2 id="settingsTitle">تنظیمات</h2>
+        <button class="icon-btn" id="closeSettings" type="button" aria-label="بستن">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <section class="field">
+          <label class="field-label" for="modelSearch">مدل</label>
+          <p class="field-desc">مدل مورد استفاده در OpenCode. اگر مدلی در کشور شما در دسترس نباشد، مدل دیگری انتخاب کنید.</p>
+          <input class="text-input" id="modelSearch" type="search" placeholder="جستجوی مدل…" autocomplete="off">
+          <div class="model-list" id="modelList" role="listbox" aria-label="مدل‌ها"></div>
+        </section>
+
+        <section class="field row-field">
+          <div>
+            <div class="field-label">اجازه خودکار ابزارها</div>
+            <p class="field-desc">اجازه اجرای ابزارها (خواندن فایل، دستور shell و…) بدون پرسش. برای امنیت بیشتر خاموش کنید.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="autoToggle">
+            <span class="track"><span class="thumb"></span></span>
+          </label>
+        </section>
+
+        <section class="field">
+          <div class="field-label">پوسته</div>
+          <div class="segmented" id="themeSeg">
+            <button type="button" data-theme-choice="system">سیستم</button>
+            <button type="button" data-theme-choice="light">روشن</button>
+            <button type="button" data-theme-choice="dark">تیره</button>
+          </div>
+        </section>
+
+        <section class="field">
+          <div class="field-label">پوشه کاری</div>
+          <code class="path-code" id="settingsDir">—</code>
+          <p class="field-desc">OpenCode در این پوشه اجرا می‌شود. برای تغییر، pchat را با <code>--dir</code> اجرا کنید.</p>
+        </section>
+
+        <section class="field danger-field">
+          <div>
+            <div class="field-label">پاک کردن همه گفتگوها</div>
+            <p class="field-desc">همه تاریخچه ذخیره‌شده در pchat حذف می‌شود. این کار برگشت‌پذیر نیست.</p>
+          </div>
+          <button class="btn-danger" id="clearAllBtn" type="button">پاک کردن</button>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="/vendor/marked.js"></script>
+  <script src="/vendor/purify.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

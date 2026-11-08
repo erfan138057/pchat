@@ -1,0 +1,8 @@
+* text=auto
+
+# Windows launchers must keep CRLF endings
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+*.png binary
+*.woff2 binary
